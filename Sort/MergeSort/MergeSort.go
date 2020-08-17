@@ -1,56 +1,47 @@
-package main
+package mergeSort
 
-import "fmt"
-
-func main(){
-	var a []int = []int{1,2,-2,4,6,-7,1,-9,3,-1,8,0}
-	fmt.Println(a)
-
- 	r := MergeSort(a, 0, len(a)-1)
-	fmt.Println(r)
-}
-
-func MergeSort(a []int, l int, r int) []int{
-	if l>=r {
-		return a[l:l+1]
+func Sort(arr []int) []int {
+	if len(arr) <= 1 { // 检查输入
+		return arr
 	}
 
-	mid := l + (r-l)/2;
-
-	left := MergeSort(a, l, mid)
-	right := MergeSort(a, mid+1, r)
-
-	return Combine(left, right)
+	return mergeSort(arr, 0, len(arr)-1)
 }
 
-func Combine(left []int, right []int) []int{
-	var result []int = make([]int, len(left)+len(right))
+func mergeSort(arr []int, l, r int) []int {
+	// 递归终止条件
+	if l >= r {
+		return arr[r : r+1]  // 注意：不是返回 arr，arr 是全部的数据，而 l 和 r 的区间只是一部分数据
+	}
 
-	i := 0
-	l,r := 0,0
-	for l < len(left) && r < len(right){
-		if left[l] < right[r] {
-			result[i] = left[l]
-			l++
-		}else {
-			result[i] = right[r]
-			r++
+	mid := l + (r-l)/2 // 注意不要溢出
+	left := mergeSort(arr, l, mid)
+	right := mergeSort(arr, mid+1, r)
+	return combine(left, right)
+}
+
+func combine(left, right []int) []int {
+	var r []int
+
+	lIndex := 0
+	rIndex := 0
+	for lIndex < len(left) && rIndex < len(right) { // 必须消费完其中一个数组
+		if left[lIndex] < right[rIndex] {
+			r = append(r, left[lIndex])
+			lIndex++
+		} else {
+			r = append(r, right[rIndex])
+			rIndex++
 		}
-
-		i++
 	}
 
-	for l < len(left) {
-		result[i] = left[l]
-		l++
-		i++
+	for ; lIndex < len(left); lIndex++ { // lIndex 也没有 append，所有从 lIndex 开始比较
+		r = append(r, left[lIndex])
 	}
 
-	for r < len(right){
-		result[i] = right[r]
-		r++
-		i++
+	for ; rIndex < len(right); rIndex++ {
+		r = append(r, right[rIndex])
 	}
 
-	return result
+	return r
 }

@@ -1,33 +1,30 @@
-package main
+package quicksort
 
-import "fmt"
+// QuickSort
+func QuickSort(arr []int) []int {
+	if len(arr) <= 1 {
+		return arr
+	}
 
-func main(){
-	var a []int = []int{1,2,-2,4,6,-7,1,-9,3,-1,8,0}
-	fmt.Println(a)
-
-	QuickSort(a,0,len(a)-1)
-	fmt.Println(a)
+	innerQuickSort(arr, 0, len(arr)-1)
+	return arr
 }
 
-func QuickSort(a []int, l int, r int){
+func innerQuickSort(arr []int, l, r int) {
 	if l >= r {
 		return
 	}
 
-	var k int = l+1
-	for i:=l+1;i<=r;i++{
-		if a[i] <= a[l]{
-			
-			a[i],a[k] = a[k],a[i]
-			k++
+	pivot := arr[r]          // 中心点，枢轴
+	i := l                   // 记录比 pivot 大的最左边的元素序号
+	for j := l; j < r; j++ { // j 遍历从 l 到 r-1
+		if arr[j] < pivot {
+			arr[i], arr[j] = arr[j], arr[i]
+			i++
 		}
 	}
+	arr[i], arr[r] = arr[r], arr[i] // 交换序号为 i 和 r 的两个元素
 
-	a[l],a[k-1] = a[k-1],a[l]
-
-	fmt.Println(a)
-
-	QuickSort(a, l, k-2)
-	QuickSort(a, k, r)
+	innerQuickSort(arr, l, i-1)
+	innerQuickSort(arr, i+1, r)
 }
