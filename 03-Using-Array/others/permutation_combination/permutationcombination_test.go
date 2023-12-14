@@ -28,6 +28,8 @@ import (
 
 func TestPermutationCombination(t *testing.T) {
 	fmt.Println(PermutationCombination([]int{1, 2}))
+	res := PermutationCombination([]int{1, 2, 3, 4, 5})
+	fmt.Println(len(res))
 }
 
 func PermutationCombination(in []int) (out [][]int) {
@@ -46,7 +48,7 @@ func PermutationCombination(in []int) (out [][]int) {
 }
 
 func except(in []int, except int) []int {
-	out := make([]int, len(in)-1)
+	out := make([]int, 0)
 	for _, v := range in {
 		if v == except {
 			continue
